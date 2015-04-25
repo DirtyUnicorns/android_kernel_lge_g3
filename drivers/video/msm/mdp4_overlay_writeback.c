@@ -472,7 +472,7 @@ void mdp4_writeback_overlay(struct msm_fb_data_type *mfd)
 	struct vsycn_ctrl *vctrl;
 	struct mdp4_overlay_pipe *pipe;
 
-	if (mfd && !mfd->panel_power_on)
+	if (mfd && mdp_fb_is_power_off(mfd))
 		return;
 
 	pr_debug("%s:+ mfd=%x\n", __func__, (int)mfd);
@@ -750,7 +750,7 @@ static void mdp4_wfd_dequeue_update(struct msm_fb_data_type *mfd,
 	struct mdp4_overlay_pipe *pipe;
 	struct msmfb_writeback_data_list *node = NULL;
 
-	if (mfd && !mfd->panel_power_on)
+	if (mfd && mdp_fb_is_power_off(mfd))
 		return;
 
 	pr_debug("%s:+ mfd=%x\n", __func__, (int)mfd);
@@ -793,7 +793,7 @@ static void mdp4_wfd_queue_wakeup(struct msm_fb_data_type *mfd,
 			struct msmfb_writeback_data_list *node)
 {
 
-	if (mfd && !mfd->panel_power_on)
+	if (mfd && mdp_fb_is_power_off(mfd))
 		return;
 
 	if (node == NULL)

@@ -45,6 +45,8 @@ static int mipi_dsi_remove(struct platform_device *pdev);
 
 static int mipi_dsi_off(struct platform_device *pdev);
 static int mipi_dsi_on(struct platform_device *pdev);
+static int mipi_dsi_low_power_config(struct platform_device *pdev,
+					int enable);
 
 static struct platform_device *pdev_list[MSM_FB_MAX_DEV_LIST];
 static int pdev_list_cnt;
@@ -62,6 +64,17 @@ static struct platform_driver mipi_dsi_driver = {
 };
 
 struct device dsi_dev;
+
+static int mipi_dsi_low_power_config(struct platform_device *pdev,
+					int enable)
+{
+	int ret = 0;
+
+	if (mipi_dsi_pdata && mipi_dsi_pdata->panel_lp_en)
+		ret = mipi_dsi_pdata->panel_lp_en(enable);
+
+	return ret;
+}
 
 static int mipi_dsi_off(struct platform_device *pdev)
 {
@@ -468,6 +481,7 @@ static int mipi_dsi_probe(struct platform_device *pdev)
 	pdata = mdp_dev->dev.platform_data;
 	pdata->on = mipi_dsi_on;
 	pdata->off = mipi_dsi_off;
+	pdata->low_power_config = mipi_dsi_low_power_config;
 	pdata->late_init = mipi_dsi_late_init;
 	pdata->next = pdev;
 

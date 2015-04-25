@@ -1012,7 +1012,7 @@ void mdp4_mddi_overlay(struct msm_fb_data_type *mfd)
 
 	vctrl = &vsync_ctrl_db[cndx];
 
-	if (!mfd->panel_power_on)
+	if (mdp_fb_is_power_off(mfd))
 		return;
 
 	pipe = vctrl->base_pipe;
@@ -1060,7 +1060,7 @@ int mdp4_mddi_overlay_cursor(struct fb_info *info, struct fb_cursor *cursor)
 {
 	struct msm_fb_data_type *mfd = info->par;
 	mutex_lock(&mfd->dma->ov_mutex);
-	if (mfd && mfd->panel_power_on) {
+	if (mfd && !mdp_fb_is_power_off(mfd)) {
 		mdp_hw_cursor_update(info, cursor);
 	}
 	mutex_unlock(&mfd->dma->ov_mutex);

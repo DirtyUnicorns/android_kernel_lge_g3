@@ -486,7 +486,7 @@ void mdp_dma2_update(struct msm_fb_data_type *mfd)
 	int need_wait = 0;
 
 	down(&mfd->dma->mutex);
-	if ((mfd) && (mfd->panel_power_on)) {
+	if ((mfd) && (!mdp_fb_is_power_off(mfd))) {
 		down(&mfd->sem);
 		spin_lock_irqsave(&mdp_spin_lock, flag);
 		if (mfd->dma->busy == TRUE)
